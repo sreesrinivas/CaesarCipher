@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #ff7e5f;
+            box-shadow: 0 0 10px rgba(255, 126, 95, 0.5);
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #feb47b;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInResult 1s forwards;
+        }
+
+        /* Animation Effects */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInResult {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Caesar Cipher Encrypt/Decrypt</h1>
+        
+        <div class="input-group">
+            <label for="operation">Select Operation:</label>
+            <select id="operation">
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="inputText">Enter Text:</label>
+            <input type="text" id="inputText" placeholder="Enter message here...">
+        </div>
+
+        <div class="input-group">
+            <label for="shiftValue">Enter Shift Value:</label>
+            <input type="number" id="shiftValue" placeholder="Enter shift value (integer)">
+        </div>
+
+        <div class="button-group">
+            <button onclick="processText()">Submit</button>
+        </div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function caesarCipher(text, shift, isEncrypting) {
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (/[a-zA-Z]/.test(char)) {
+                    let charCode = char.charCodeAt(0);
+                    let base = (char >= 'A' && char <= 'Z') ? 65 : 97; // Uppercase or lowercase
+                    let newCharCode = (charCode - base + (isEncrypting ? shift : -shift)) % 26 + base;
+                    if (newCharCode < base) newCharCode += 26; // Adjust for negative wraparound
+                    result += String.fromCharCode(newCharCode);
+                } else {
+                    result += char; // Keep non-alphabetic characters unchanged
+                }
+            }
+            return result;
+        }
+
+        function processText() {
+            const operation = document.getElementById('operation').value;
+            const inputText = document.getElementById('inputText').value;
+            const shiftValue = parseInt(document.getElementById('shiftValue').value);
+
+            if (!inputText || isNaN(shiftValue)) {
+                alert("Please enter both text and a valid shift value.");
+                return;
+            }
+
+            let result;
+            if (operation === 'encrypt') {
+                result = caesarCipher(inputText, shiftValue, true);
+                document.getElementById('result').textContent = `Encrypted Message: ${result}`;
+            } else if (operation === 'decrypt') {
+                result = caesarCipher(inputText, shiftValue, false);
+                document.getElementById('result').textContent = `Decrypted Message: ${result}`;
+            }
+        }
+    </script>
+
+</body>
+</html>

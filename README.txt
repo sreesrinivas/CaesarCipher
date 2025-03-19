@@ -5,3 +5,6 @@ Select an operation: Choose between encryption or decryption.
 Enter text: Provide the message you want to process.
 Enter a shift value: Specify the number of shifts (integer).
 Click "Submit": The transformed text will be displayed.
+
+License:-
+This project is open-source and free to use.
